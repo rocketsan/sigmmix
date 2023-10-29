@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+  <head th:replace="~{fragments :: head}"></head>
+<body>
+
+  <header th:replace="~{fragments :: header}"></header>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Leftbar -->
+            <div th:replace="~{fragments :: leftbar}"></div>
+
+            <!-- MainBar -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2 mb-4" th:if="${user.id}">Редактирование пользователя</h1>
+                    <h1 class="h2 mb-4" th:unless="${user.id}">Добавить нового пользователя</h1>
+
+                    <form th:action="@{/save-user}" method="post" th:object="${user}">
+                        <input type="hidden" id="id" name="id" th:field="*{id}">
+
+                        <div class="row mb-3">
+                            <label for="login" class="col-sm-2 col-form-label">Логин</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="login" id="login" th:field="*{login}" required/>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="password" class="col-sm-2 col-form-label">Пароль</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="password" id="password" th:field="*{password}" required/>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="role" class="col-sm-2 col-form-label">Роль</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" name="role" id="role" th:field="*{role}">
+                                    <option th:each="role : ${T(ru.sigma.sigmmix.model.User.RoleType).values()}"
+                                            th:value="${role}"
+                                            th:text="${role}">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="telegramId" class="col-sm-2 col-form-label">Telegram id</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="telegramId" id="telegramId" th:field="*{telegramId}"/>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-5 text-start">
+                                <button class="btn btn-primary" type="submit" th:text="${user.id} ? 'Сохранить' : 'Добавить'">Добавить</button>
+                            </div>
+                            <div class="col-sm-5 text-end">
+                                <a href="javascript:void(0);" onclick="history.back();" class="btn btn-secondary">Назад</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
