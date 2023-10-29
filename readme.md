@@ -8,8 +8,8 @@
 
 # Установка приложения
 
-1. Переименовать файл application.example в application.properties и настроить коннекцию к БД
-2. Запустить метод main() в классе ru.sigma.sigmmix.MainApplication
+1. Переименовать файл `application.example` в `application.properties` и настроить коннекцию к БД
+2. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApplication`
 3. Зайти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
 
 # Техническая информация по проекту
