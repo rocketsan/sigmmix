@@ -43,12 +43,14 @@ public class UserController {
         List<User> users = userRepository.findAll();
         users.sort(Comparator.comparing(User::getId));
         model.addAttribute("users", users);
+        model.addAttribute("pageTitle", "Пользователи");
         return "users";
     }
 
     @GetMapping("/add-user")
     public String userAdd(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("pageTitle", "Пользователи");
         return "edit-user";
     }
 
@@ -56,6 +58,7 @@ public class UserController {
     public String editUserForm(@PathVariable Long id, Model model) {
         User user = userRepository.findById(id).orElse(new User());
         model.addAttribute("user", user);
+        model.addAttribute("pageTitle", "Пользователи");
         return "edit-user";
     }
 

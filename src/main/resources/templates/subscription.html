@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+  <head th:replace="~{fragments :: head}"></head>
+<body>
+
+  <header th:replace="~{fragments :: header}"></header>
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Leftbar -->
+            <div th:replace="~{fragments :: leftbar}"></div>
+
+            <!-- MainBar -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2 mb-2">Уведомления</h1>
+                    <p class="lead">
+                        Настройка рассылки уведомлений по событиям мониторинга
+                    </p>
+                    <table class="table table-bordered">
+                        <tr class="table-secondary">
+                            <th>ID</th>
+                            <th>Хост</th>
+                            <th>Пользователь</th>
+                            <th></th>
+                        </tr>
+                        <th:block th:if="${#lists.isEmpty(subscriptions)}">
+                            <tr>
+                                <td colspan="4">Список уведомлений ещё пустой</td>
+                            </tr>
+                        </th:block>
+                        <tr th:each="subscription : ${subscriptions}">
+                            <td th:text="${subscription.id}"></td>
+                            <td th:text="${subscription.host}"></td>
+                            <td th:text="${subscription.user}"></td>
+                            <td>
+                                <a th:href="@{/edit-subscription/{id}(id=${subscription.id})}"><i class="bi bi-pencil-square"></i></a>
+                                <a th:href="@{/delete-subscription/{id}(id=${subscription.id})}" onclick="return confirm('Вы уверены?')"><i class="bi bi-trash" style="color:#ff000085"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                    <a class="btn btn-secondary" role="button" href="/add-subscription">Добавить уведомление</a>
+                </div>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

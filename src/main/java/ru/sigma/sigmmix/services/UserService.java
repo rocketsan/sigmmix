@@ -22,6 +22,12 @@ public class UserService implements UserDetailsService {
         this.repository = repository;
     }
 
+    /**
+     * Функция проверкаи авторизации
+     * @param username логин авторизирцемого пользователя
+     * @return principal
+     * @throws UsernameNotFoundException - если пользователь не найден
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("Load user: "+username);

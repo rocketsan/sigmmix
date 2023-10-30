@@ -23,22 +23,4 @@ public class PagesController {
         return "index";
     }
 
-    @GetMapping("/hosts")
-    public String hosts(Model model) {
-        model.addAttribute("pageTitle", "Хосты");
-        return "hosts";
-    }
-
-    @GetMapping("/templates")
-    public String templates(Model model) {
-        model.addAttribute("pageTitle", "Шаблоны");
-        return "templates";
-    }
-
-    @GetMapping("/notification")
-    public String notification(Model model) {
-        model.addAttribute("pageTitle", "Уведомления");
-        return "notification";
-    }
-
 }

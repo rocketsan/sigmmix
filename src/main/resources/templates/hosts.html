@@ -14,8 +14,37 @@
             <!-- MainBar -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2" th:text="${pageTitle}"></h1>
-                    <p>some hosts content...</p>
+                    <h1 class="h2 mb-2">Хосты</h1>
+                    <p class="lead">
+                        Создайте хосты, которые нужно мониторить.
+                    </p>
+                    <table class="table table-bordered">
+                        <tr class="table-secondary">
+                            <th>ID</th>
+                            <th>Имя</th>
+                            <th>IP-адрсес</th>
+                            <th>Тип мониторинга</th>
+                            <th>Активен</th>
+                            <th></th>
+                        </tr>
+                        <th:block th:if="${#lists.isEmpty(hosts)}">
+                            <tr>
+                                <td colspan="6">Список хостов ещё пустой</td>
+                            </tr>
+                        </th:block>
+                        <tr th:each="host : ${hosts}">
+                            <td th:text="${host.id}"></td>
+                            <td th:text="${host.name}"></td>
+                            <td th:text="${host.ipAddress}"></td>
+                            <td th:text="${host.interfaceType}"></td>
+                            <td th:text="${host.active}"></td>
+                            <td>
+                                <a th:href="@{/edit-host/{id}(id=${host.id})}"><i class="bi bi-pencil-square"></i></a>
+                                <a th:href="@{/delete-host/{id}(id=${host.id})}" onclick="return confirm('Вы уверены?')"><i class="bi bi-trash" style="color:#ff000085"></i></a>
+                            </td>
+                        </tr>
+                    </table>
+                    <a class="btn btn-secondary" role="button" href="/add-host">Добавить хост</a>
                 </div>
             </main>
         </div>
