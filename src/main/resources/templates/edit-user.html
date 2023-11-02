@@ -49,9 +49,8 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-sm-2"></div>
-                            <div class="col-sm-5 text-start">
-                                <button class="btn btn-primary" type="submit" th:text="${user.id} ? 'Сохранить' : 'Добавить'">Добавить</button>
+                            <div class="col-sm-5 offset-sm-2 text-start">
+                                <button class="btn btn-primary" type="submit" th:text="${user.id} ? 'Сохранить' : 'Добавить пользователя'">Добавить</button>
                             </div>
                             <div class="col-sm-5 text-end">
                                 <a href="javascript:void(0);" onclick="history.back();" class="btn btn-secondary">Назад</a>

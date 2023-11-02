@@ -16,7 +16,7 @@ public class Host {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull
-    private String name;
+    private String hostname;
     @NotNull
     private String ipAddress;
     @Enumerated(EnumType.STRING) // Хранить значение Enum как строку
@@ -24,12 +24,12 @@ public class Host {
     private InterfaceType interfaceType;
     private boolean isActive;
 
-    public @NotNull String getName() {
-        return name;
+    public @NotNull String getHostname() {
+        return hostname;
     }
 
-    public void setName(@NotNull String name) {
-        this.name = name;
+    public void setHostname(@NotNull String name) {
+        this.hostname = name;
     }
 
     public @NotNull String getIpAddress() {
@@ -68,7 +68,7 @@ public class Host {
     public String toString() {
         return "Host{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + hostname + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", interfaceType=" + interfaceType +
                 ", isActive=" + isActive +

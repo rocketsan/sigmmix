@@ -1,6 +1,4 @@
 ![logo](https://s1.hostingkartinok.com/uploads/images/2023/10/3c99cb671406a906c724ea00fac0c96b.png)     
-
----
 # Описание проекта
 Приложение Sigmmix предназначено для мониторинга параметров хостов в локальной сети. 
 
@@ -17,12 +15,11 @@ CREATE USER spring WITH PASSWORD 'spring';
 GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;    
 ```
 2. Переименовать файл `application.example` в `application.properties` и настроить коннекцию к БД
-3. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApplication`
-4. Зайти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
+3. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApp`
+4. Перейти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
 
 **Внимание:** В приложении есть встроенная учетная запись с правами администратора: `admin:admin`
 
----
 # Техническая информация по проекту
 
 ## Список endpoint'ов

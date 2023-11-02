@@ -24,7 +24,7 @@
                             <th>Имя</th>
                             <th>IP-адрсес</th>
                             <th>Тип мониторинга</th>
-                            <th>Активен</th>
+                            <th>Включен</th>
                             <th></th>
                         </tr>
                         <th:block th:if="${#lists.isEmpty(hosts)}">
@@ -33,12 +33,13 @@
                             </tr>
                         </th:block>
                         <tr th:each="host : ${hosts}">
-                            <td th:text="${host.id}"></td>
-                            <td th:text="${host.name}"></td>
-                            <td th:text="${host.ipAddress}"></td>
-                            <td th:text="${host.interfaceType}"></td>
-                            <td th:text="${host.active}"></td>
-                            <td>
+                            <td class="align-middle" th:text="${host.id}"></td>
+                            <td class="align-middle" th:text="${host.hostname}"></td>
+                            <td class="align-middle" th:text="${host.ipAddress}"></td>
+                            <td class="align-middle" th:text="${host.interfaceType}"></td>
+                            <td th:if="${host.active}" class="text-center"><i class="bi bi-toggle-on" style="color:green"></i></td>
+                            <td th:if="${!host.active}" class="text-center"><i class="bi bi-toggle2-off" style="color:red;font-size: 2rem;"></i></td>
+                            <td class="align-middle">
                                 <a th:href="@{/edit-host/{id}(id=${host.id})}"><i class="bi bi-pencil-square"></i></a>
                                 <a th:href="@{/delete-host/{id}(id=${host.id})}" onclick="return confirm('Вы уверены?')"><i class="bi bi-trash" style="color:#ff000085"></i></a>
                             </td>

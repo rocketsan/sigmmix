@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import ru.sigma.sigmmix.model.Host;
 import ru.sigma.sigmmix.repositories.HostRepository;
 
@@ -34,4 +36,49 @@ public class HostController {
         model.addAttribute("pageTitle", "Хосты");
         return "hosts";
     }
+
+    @GetMapping("/add-host")
+    public String hostAdd(Model model) {
+        model.addAttribute("host", new Host());
+        model.addAttribute("pageTitle", "Хосты");
+        return "edit-host";
+    }
+
+    @PostMapping("/save-host")
+    public String addHost(@ModelAttribute Host host) {
+        System.out.println("POST /save-host/ "+host);
+        hostRepository.save(host);
+        return "redirect:/hosts";
+    }
+
+    @GetMapping("/edit-host/{id}")
+    public String editHostForm(@PathVariable Long id, Model model) {
+        Host host = hostRepository.findById(id).orElse(new Host());
+        model.addAttribute("host", host);
+        model.addAttribute("pageTitle", "Хосты");
+        return "edit-host";
+    }
+
+    /*
+    @PostMapping("/edit-host/{id}")
+    public String editHost(@PathVariable Long id, @ModelAttribute Host editedHost) {
+        System.out.println("POST /edit-host/"+id);
+        Host existingHost = hostRepository.findById(id).orElse(null);
+
+        if (existingHost == null) {
+            // Обработка случая, если хост не найден
+            return "redirect:/hosts";
+        }
+
+        // Обновите поля существующего пользователя данными из editedUser
+        existingHost.setHostname(editedHost.getHostname());
+        existingHost.setIpAddress(editedHost.getIpAddress());
+        existingHost.setInterfaceType(editedHost.getInterfaceType());
+        System.out.println("isActive="+editedHost.isActive());
+        existingHost.setActive(editedHost.isActive());
+
+        hostRepository.save(existingHost);
+        return "redirect:/hosts";
+    }
+    */
 }

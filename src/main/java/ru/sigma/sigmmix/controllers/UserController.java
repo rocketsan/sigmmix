@@ -68,6 +68,7 @@ public class UserController {
         return "redirect:/users";
     }
 
+    /*
     @PostMapping("/edit-user/{id}")
     public String editUser(@PathVariable Long id, @ModelAttribute User editedUser) {
         User existingUser = userRepository.findById(id).orElse(null);
@@ -99,6 +100,7 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/users";
     }
+     */
 
     // Для отладки
     @GetMapping("/allUsers")
