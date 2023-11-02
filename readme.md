@@ -14,7 +14,7 @@ CREATE DATABASE springboot;
 CREATE USER spring WITH PASSWORD 'spring';
 GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;    
 ```
-2. Переименовать файл `application.example` в `application.properties` и настроить коннекцию к БД
+2. Переименовать файл `application.example` в `application.properties` ~~и настроить коннекцию к БД~~
 3. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApp`
 4. Перейти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
 
@@ -33,6 +33,10 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 | /subscription | Список рассылок уведомлений |
 | /login        | Страница входа              |
 | /logout       | Выход из системы            |
+
+## Вопросы преподавателю
+1. Нужно ли документировать исходники по javadoc?
+2. Не работает обновление boolean поля `Host.isActive` посредством checkbox
 
 
 ## Useful links

@@ -10,4 +10,5 @@ public interface HostRepository extends CrudRepository<Host, Long> {
 
     @NotNull List<Host> findAll();
 
+    List<Host> findByisActive(boolean b);
 }
