@@ -31,9 +31,13 @@ public class UserController {
     // Добавляем админа по умолчанию при запуске приложения
     @PostConstruct
     private void addDefaultUser() {
+        // создаём дефолтного админа
         if (userRepository.findByLogin("admin") == null) {
-            User defaultUser = new User("admin", "admin", RoleType.ADMIN);
-            userRepository.save(defaultUser);
+            userRepository.save(new User("admin", "admin", RoleType.ADMIN));
+        }
+        // создаём дефолтного дежурного
+        if (userRepository.findByLogin("mon") == null) {
+            userRepository.save(new User("mon", "mon", RoleType.MONITOR));
         }
     }
 
@@ -88,6 +92,8 @@ public class UserController {
         return "redirect:/users";
     }
 
+     */
+
     @GetMapping("/delete-user/{id}")
     public String deleteUser(@PathVariable Long id) {
         User user = userRepository.findById(id).orElse(null);
@@ -100,7 +106,6 @@ public class UserController {
         userRepository.delete(user);
         return "redirect:/users";
     }
-     */
 
     // Для отладки
     @GetMapping("/allUsers")

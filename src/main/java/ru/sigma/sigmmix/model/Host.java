@@ -23,6 +23,15 @@ public class Host {
     @NotNull
     private InterfaceType interfaceType;
     private boolean isActive;
+    private boolean isRemoved;
+
+    public boolean isRemoved() {
+        return isRemoved;
+    }
+
+    public void setRemoved(boolean removed) {
+        isRemoved = removed;
+    }
 
     public @NotNull String getHostname() {
         return hostname;
@@ -68,10 +77,11 @@ public class Host {
     public String toString() {
         return "Host{" +
                 "id=" + id +
-                ", name='" + hostname + '\'' +
+                ", hostname='" + hostname + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", interfaceType=" + interfaceType +
                 ", isActive=" + isActive +
+                ", isRemoved=" + isRemoved +
                 '}';
     }
 }

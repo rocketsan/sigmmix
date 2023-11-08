@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.sigma.sigmmix.model.Host;
 import ru.sigma.sigmmix.repositories.HostRepository;
 
@@ -59,26 +57,53 @@ public class HostController {
         return "edit-host";
     }
 
-    /*
-    @PostMapping("/edit-host/{id}")
-    public String editHost(@PathVariable Long id, @ModelAttribute Host editedHost) {
-        System.out.println("POST /edit-host/"+id);
+    @GetMapping("/delete-host/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Host host = hostRepository.findById(id).orElse(null);
+
+        if (host == null) {
+            // Обработка случая, если хост не найден
+            redirectAttributes.addFlashAttribute("errorMessage", "Хост не найден!");
+            return "redirect:/hosts"; // или другой URL
+        }
+        if (host.isActive()) {
+            // Хост активный! Сначала выключите!
+            redirectAttributes.addFlashAttribute("errorMessage", "Нельзя удалить активный хост!");
+            return "redirect:/hosts";
+        }
+
+        host.setRemoved(true); // removed flag
+        hostRepository.save(host);
+        redirectAttributes.addFlashAttribute("successMessage", "Хост успешно удален");
+
+        return "redirect:/hosts";
+    }
+
+
+    @GetMapping("/edit-host/{id}/{action}")
+    public String editHost(@PathVariable Long id, @PathVariable String action, RedirectAttributes redirectAttributes) {
+        System.out.println("POST /edit-host/"+id+"/"+action);
+
         Host existingHost = hostRepository.findById(id).orElse(null);
 
         if (existingHost == null) {
             // Обработка случая, если хост не найден
+            redirectAttributes.addFlashAttribute("errorMessage", "Хост не найден!");
             return "redirect:/hosts";
         }
 
-        // Обновите поля существующего пользователя данными из editedUser
-        existingHost.setHostname(editedHost.getHostname());
-        existingHost.setIpAddress(editedHost.getIpAddress());
-        existingHost.setInterfaceType(editedHost.getInterfaceType());
-        System.out.println("isActive="+editedHost.isActive());
-        existingHost.setActive(editedHost.isActive());
+        if (action.equals("enable")) {
+            System.out.println("isActive=>true");
+            existingHost.setActive(true);
+            hostRepository.save(existingHost);
+            redirectAttributes.addFlashAttribute("successMessage", "Мониторинг хоста включен");
+        } else if (action.equals("disable")) {
+            System.out.println("isActive=>false");
+            existingHost.setActive(false);
+            hostRepository.save(existingHost);
+            redirectAttributes.addFlashAttribute("successMessage", "Мониторинг хоста выключен");
+        }
 
-        hostRepository.save(existingHost);
         return "redirect:/hosts";
     }
-    */
 }

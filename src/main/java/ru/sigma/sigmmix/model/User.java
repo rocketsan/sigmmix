@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 public class User {
 
     public enum RoleType {
-        USER,
+        MONITOR,
         ADMIN
     }
 
