@@ -16,7 +16,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/login").permitAll()
+                        //.requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/*.css").permitAll()
                         .requestMatchers("/favicon.ico").permitAll()
                         .anyRequest().authenticated()

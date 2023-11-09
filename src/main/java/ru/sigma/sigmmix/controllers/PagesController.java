@@ -20,7 +20,7 @@ public class PagesController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("pageTitle", "Панель управления");
-        return "index";
+        return "chart";
     }
 
 }
