@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<header th:replace="~{fragments :: header}"></header>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Leftbar -->
+        <div th:replace="~{fragments :: leftbar}"></div>
+
+        <!-- MainBar -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2 mb-4" th:if="${template.id}">Редактирование шаблона</h1>
+                <h1 class="h2 mb-4" th:unless="${template.id}">Добавление нового шаблона</h1>
+
+                <form th:action="@{/save-template}" method="post" th:object="${template}">
+                    <input type="hidden" id="id" name="id" th:field="*{id}">
+
+                    <div class="row mb-3">
+                        <label for="hostname" class="col-sm-2 col-form-label">Название шаблона</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="hostname" id="hostname" th:field="*{name}" required/>
+                        </div>
+                    </div>
+                    <!--
+                    <div class="row mb-3">
+                        <label for="className" class="col-sm-2 col-form-label">Java-класс</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="ipAddress" id="className" th:field="*{className}" required/>
+                        </div>
+                    </div>
+                    -->
+                    <div class="row mb-3">
+                        <label for="role" class="col-sm-2 col-form-label">Java-класс</label>
+                        <div class="col-sm-10">
+                            <select class="form-select" name="role" id="role" th:field="*{className}">
+                                <option th:each="entity : ${entities}"
+                                        th:value="${entity}"
+                                        th:text="${entity}">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-sm-5 offset-sm-2 text-start">
+                            <button class="btn btn-primary" type="submit" th:text="${template.id} ? 'Сохранить шаблон' : 'Добавить шаблон'">Добавить</button>
+                        </div>
+                        <div class="col-sm-5 text-end">
+                            <a href="javascript:void(0);" onclick="history.back();" class="btn btn-secondary">Назад</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+</html>

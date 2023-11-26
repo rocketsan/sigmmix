@@ -1,4 +1,4 @@
-package ru.sigma.sigmmix.services;
+package ru.sigma.sigmmix.services.monitoring;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -11,19 +11,14 @@ import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.sigma.sigmmix.model.Host;
-import ru.sigma.sigmmix.model.RawData;
 import ru.sigma.sigmmix.repositories.HostRepository;
 import ru.sigma.sigmmix.repositories.RawDataRepository;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.List;
 
 @Service
-public class MonitoringService {
+public class SNMPMonitoringService extends MonitoringService {
 
     @Autowired
     private HostRepository hostRepository;
@@ -62,40 +57,11 @@ public class MonitoringService {
     }
 
     /**
-     * Отслеживание метрик активных хостов
-     * @throws IOException если что-то пошло не так
-     */
-    @Scheduled(initialDelay = 3000, fixedRate = 10000)  // каждыйе 10 секунд через 3 секунды после старта
-    // todo: вынести в application.properties)
-    public void monitorActiveHosts() {
-        System.out.print("."); // debug
-        List<Host> activeHosts = hostRepository.findByisActive(true); // мониторим только ативные хосты
-
-        for (Host host : activeHosts) {
-            // todo: использовать различные шаблоны для получения метрик хоста
-            double memoryUtilization = 0;
-            try {
-                memoryUtilization = retrieveMemoryUtilization(host.getIpAddress());
-
-                RawData rawData = new RawData();
-                rawData.setHost(host);
-                rawData.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                rawData.setMemoryUtilization(memoryUtilization);
-
-                System.out.println(rawData); // debug
-                rawDataRepository.save(rawData);
-            } catch (Exception e) {
-                System.err.println("В процедуре мониторинга хостов выброшено исключение: "+e.getMessage());
-            }
-        }
-    }
-
-    /**
      * Реализация логики для опроса удаленного сервера через SNMP и получения значения утилизации памяти
      * @param ipAddress адрес хоста, по которому нужно получить утилизацию
      * @return Значение текущей утилизации памяти хоста в процентах
      */
-    private double retrieveMemoryUtilization(String ipAddress) throws Exception {
+    public double getMemoryUtilization(String ipAddress) throws Exception {
         // Создание объекта CommunityTarget для настройки адреса и комьюнити
         CommunityTarget target = new CommunityTarget();
         target.setCommunity(new OctetString("public"));
@@ -125,4 +91,5 @@ public class MonitoringService {
         }
         return memoryUsagePercentage;
     }
+
 }

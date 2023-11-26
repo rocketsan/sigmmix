@@ -34,7 +34,7 @@
                             <th>ID</th>
                             <th>Имя</th>
                             <th>IP-адрсес</th>
-                            <th>Тип мониторинга</th>
+                            <th>Класс мониторинга</th>
                             <th>Вкл.</th>
                             <th></th>
                         </tr>
@@ -47,7 +47,7 @@
                             <td class="align-middle" th:text="${host.id}"></td>
                             <td class="align-middle" th:text="${host.hostname}"></td>
                             <td class="align-middle" th:text="${host.ipAddress}"></td>
-                            <td class="align-middle" th:text="${host.interfaceType}"></td>
+                            <td class="align-middle" th:text="${host.className}"></td>
                             <td th:if="${host.active}" class="text-center"><a th:href="@{'/edit-host/'+${host.id}+'/disable'}"><i class="bi bi-toggle-on" style="color:green;font-size:2rem;"></i></a></td>
                             <td th:if="${!host.active}" class="text-center"><a th:href="@{'/edit-host/'+${host.id}+'/enable'}"><i class="bi bi-toggle-off" style="color:red;font-size: 2rem;"></i></a></td>
                             <td class="align-middle">

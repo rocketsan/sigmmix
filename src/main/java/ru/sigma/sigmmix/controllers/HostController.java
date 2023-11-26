@@ -1,5 +1,6 @@
 package ru.sigma.sigmmix.controllers;
 
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -8,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.sigma.sigmmix.model.Host;
 import ru.sigma.sigmmix.repositories.HostRepository;
+import ru.sigma.sigmmix.services.monitoring.MonitoringService;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class HostController {
@@ -35,10 +38,22 @@ public class HostController {
         return "hosts";
     }
 
+    @GetMapping("/getServices")
+    @ResponseBody
+    public List<String> getMonitoringServices() {
+        Reflections reflections = new Reflections();
+
+        return reflections.getSubTypesOf(MonitoringService.class)
+                .stream()
+                .map(Class::getSimpleName)
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/add-host")
     public String hostAdd(Model model) {
         model.addAttribute("host", new Host());
         model.addAttribute("pageTitle", "Хосты");
+        model.addAttribute("classNames", getMonitoringServices());
         return "edit-host";
     }
 
@@ -54,6 +69,7 @@ public class HostController {
         Host host = hostRepository.findById(id).orElse(new Host());
         model.addAttribute("host", host);
         model.addAttribute("pageTitle", "Хосты");
+        model.addAttribute("classNames", getMonitoringServices());
         return "edit-host";
     }
 

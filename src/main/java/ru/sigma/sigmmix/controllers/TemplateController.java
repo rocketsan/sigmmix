@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Controller
+@Deprecated
 public class TemplateController {
 
     @Value("${application.name}")
@@ -33,6 +34,14 @@ public class TemplateController {
         model.addAttribute("templates", templates);
         model.addAttribute("pageTitle", "Шаблоны");
         return "templates";
+    }
+
+
+    @GetMapping("/add-template")
+    public String templateAdd(Model model) {
+        model.addAttribute("template", new Template());
+        model.addAttribute("pageTitle", "Шаблоны");
+        return "edit-template";
     }
 
 }

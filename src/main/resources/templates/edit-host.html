@@ -33,12 +33,12 @@
                             </div>
                         </div>
                         <div class="row mb-3">
-                            <label for="role" class="col-sm-2 col-form-label">Интерфейс</label>
+                            <label for="role" class="col-sm-2 col-form-label">Java-класс</label>
                             <div class="col-sm-10">
-                                <select class="form-select" name="role" id="role" th:field="*{interfaceType}">
-                                    <option th:each="interfaceType : ${T(ru.sigma.sigmmix.model.Host.InterfaceType).values()}"
-                                            th:value="${interfaceType}"
-                                            th:text="${interfaceType}">
+                                <select class="form-select" name="role" id="role" th:field="*{className}">
+                                    <option th:each="className : ${classNames}"
+                                            th:value="${className}"
+                                            th:text="${className}">
                                 </select>
                             </div>
                         </div>

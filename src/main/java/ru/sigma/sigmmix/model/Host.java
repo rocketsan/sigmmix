@@ -7,11 +7,6 @@ import jakarta.validation.constraints.NotNull;
 @Table(name = "tbl_host")
 public class Host {
 
-    public enum InterfaceType {
-        SNMP,
-        SSH
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -19,9 +14,8 @@ public class Host {
     private String hostname;
     @NotNull
     private String ipAddress;
-    @Enumerated(EnumType.STRING) // Хранить значение Enum как строку
     @NotNull
-    private InterfaceType interfaceType;
+    private String className;
     private boolean isActive;
     private boolean isRemoved;
 
@@ -49,14 +43,6 @@ public class Host {
         this.ipAddress = ipAddress;
     }
 
-    public @NotNull InterfaceType getInterfaceType() {
-        return interfaceType;
-    }
-
-    public void setInterfaceType(@NotNull InterfaceType interfaceType) {
-        this.interfaceType = interfaceType;
-    }
-
     public boolean isActive() {
         return isActive;
     }
@@ -73,13 +59,21 @@ public class Host {
         return id;
     }
 
+    public @NotNull String getClassName() {
+        return className;
+    }
+
+    public void setClassName(@NotNull String className) {
+        this.className = className;
+    }
+
     @Override
     public String toString() {
         return "Host{" +
                 "id=" + id +
                 ", hostname='" + hostname + '\'' +
                 ", ipAddress='" + ipAddress + '\'' +
-                ", interfaceType=" + interfaceType +
+                ", className=" + className +
                 ", isActive=" + isActive +
                 ", isRemoved=" + isRemoved +
                 '}';

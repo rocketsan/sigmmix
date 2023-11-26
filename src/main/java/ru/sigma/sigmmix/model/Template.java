@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tbl_template")
+@Deprecated
 public class Template {
 
     @Id
