@@ -34,10 +34,23 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 | /login        | Страница входа              |
 | /logout       | Выход из системы            |
 
-## Вопросы преподавателю
-1. Нужно ли документировать исходники по javadoc?
-2. Не работает обновление boolean поля `Host.isActive` посредством checkbox
+## Как сконфигурировать SNMP сервер?
+1. Установить пакет:
 
+    `yum install snmpd`
+2. Сконфигурировать /etc/snmpd.conf: 
+
+    **edit:** `view     systemview    included   .1.3.6.1        80`
+
+    `systemctl restart snmpd`
+3. Добавить сервис snmp в firewall:
+
+    `firewall-cmd --permanent --add-service=snmp`
+
+    `firewall-cmd --reload`
+4. Проверка:
+
+    `snmpwalk -v 2c -c public 127.0.0.1 1.3.6.1.4.1.2021.4.6`
 
 ## Useful links
 * https://logomaster.ai/ - генератор логотипов по ключевым словам
