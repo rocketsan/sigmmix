@@ -45,7 +45,8 @@ public class HostController {
 
         return reflections.getSubTypesOf(MonitoringService.class)
                 .stream()
-                .map(Class::getSimpleName)
+                //.map(Class::getSimpleName)
+                .map(Class::getName)
                 .collect(Collectors.toList());
     }
 

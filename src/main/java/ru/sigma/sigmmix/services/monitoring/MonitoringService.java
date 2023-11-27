@@ -1,19 +1,12 @@
 package ru.sigma.sigmmix.services.monitoring;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import ru.sigma.sigmmix.model.Host;
-import ru.sigma.sigmmix.model.RawData;
-import ru.sigma.sigmmix.repositories.HostRepository;
-import ru.sigma.sigmmix.repositories.RawDataRepository;
-
-import java.sql.Timestamp;
-import java.util.List;
+import java.io.IOException;
 
 public abstract class MonitoringService {
 
+    /* Для упрощения бизнес-процессов отслеживаем только 1 параметр */
     abstract double getMemoryUtilization(String IPAddress) throws Exception;
 
-
+    abstract void destroy() throws IOException;
 
 }

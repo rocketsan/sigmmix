@@ -29,10 +29,13 @@ public class SNMPMonitoringService extends MonitoringService {
     private Snmp snmp;
     private PDU pdu;
 
+    public SNMPMonitoringService() throws IOException {
+        initSNMP();
+    }
+
     /**
      * Создание объектов для управления SNMP
      */
-    @PostConstruct
     public void initSNMP() throws IOException {
 
         TransportMapping<? extends Address> transport = new DefaultUdpTransportMapping();
@@ -51,8 +54,7 @@ public class SNMPMonitoringService extends MonitoringService {
      * Код, который должен выполниться при завершении приложения - закрытие сессии smnp (а надо ли?)
      * @throws IOException если что-то пошло не так
      */
-    @PreDestroy
-    public void onDestroy() throws IOException {
+    public void destroy() throws IOException {
         snmp.close();
     }
 
