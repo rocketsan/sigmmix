@@ -29,7 +29,6 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 | /             | Главная страница дашборда   |
 | /users        | Список пользовтелей         |
 | /hosts        | Список хостов               |
-| /templates    | Список шаблонов             |
 | /subscription | Список рассылок уведомлений |
 | /login        | Страница входа              |
 | /logout       | Выход из системы            |
@@ -37,7 +36,7 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 ## Как сконфигурировать SNMP сервер?
 1. Установить пакет:
 
-    `yum install snmpd`
+    `yum install net-snmp`
 2. Сконфигурировать /etc/snmpd.conf: 
 
     **edit:** `view     systemview    included   .1.3.6.1        80`
