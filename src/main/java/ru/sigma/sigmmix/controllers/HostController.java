@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.sigma.sigmmix.model.Host;
 import ru.sigma.sigmmix.repositories.HostRepository;
-import ru.sigma.sigmmix.services.monitoring.MonitoringService;
+import ru.sigma.sigmmix.services.monitoring.MonitoringServiceBase;
 
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +43,7 @@ public class HostController {
     public List<String> getMonitoringServices() {
         Reflections reflections = new Reflections();
 
-        return reflections.getSubTypesOf(MonitoringService.class)
+        return reflections.getSubTypesOf(MonitoringServiceBase.class)
                 .stream()
                 //.map(Class::getSimpleName)
                 .map(Class::getName)

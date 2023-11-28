@@ -1,7 +1,5 @@
 package ru.sigma.sigmmix.services.monitoring;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
@@ -18,7 +16,7 @@ import ru.sigma.sigmmix.repositories.RawDataRepository;
 import java.io.IOException;
 
 @Service
-public class SNMPMonitoringService extends MonitoringService {
+public class SNMPServiceImpl extends MonitoringServiceBase {
 
     @Autowired
     private HostRepository hostRepository;
@@ -29,7 +27,7 @@ public class SNMPMonitoringService extends MonitoringService {
     private Snmp snmp;
     private PDU pdu;
 
-    public SNMPMonitoringService() throws IOException {
+    public SNMPServiceImpl() throws IOException {
         initSNMP();
     }
 

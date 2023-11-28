@@ -8,14 +8,12 @@ import ru.sigma.sigmmix.model.RawData;
 import ru.sigma.sigmmix.repositories.HostRepository;
 import ru.sigma.sigmmix.repositories.RawDataRepository;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Service
-public class Poller {
+public class PollerJobService {
 
     @Autowired
     private HostRepository hostRepository;
@@ -33,20 +31,23 @@ public class Poller {
             System.out.println(host);
 
             try {
-                // Вызываем метод getMemoryUtilization() соответствующего класса
+                // Создаём объект соответствующего хосту класса мониторинга (SNMPServiceImpl и др.)
                 String className = host.getClassName();
                 Class<?> myClass = Class.forName(className);
-                MonitoringService myObject = (MonitoringService) myClass.newInstance();
+                MonitoringServiceBase myObject = (MonitoringServiceBase) myClass.newInstance();
+                // Вызываем метод getMemoryUtilization() с параметром host.ipAddress
                 Method method = myClass.getMethod("getMemoryUtilization", String.class);
                 Object result = method.invoke(myObject, host.getIpAddress());
                 //System.out.println("result = "+result+", "+result.getClass());
 
+                // приводим результат к требуемому формату double
                 double memoryUtilization = 0;
                 if (result instanceof Double)
                     memoryUtilization = (Double) result;
 
-                myObject.destroy(); // last step
+                myObject.destroy(); // закрываем ресурсы
 
+                // Сохранение отслеживаемого параметра в БД
                 RawData rawData = new RawData();
                 rawData.setHost(host);
                 rawData.setTimestamp(new Timestamp(System.currentTimeMillis()));
