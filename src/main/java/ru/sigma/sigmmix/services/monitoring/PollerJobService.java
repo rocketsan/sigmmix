@@ -8,6 +8,7 @@ import ru.sigma.sigmmix.model.RawData;
 import ru.sigma.sigmmix.repositories.HostRepository;
 import ru.sigma.sigmmix.repositories.RawDataRepository;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.List;
@@ -34,16 +35,19 @@ public class PollerJobService {
                 // Создаём объект соответствующего хосту класса мониторинга (SNMPServiceImpl и др.)
                 String className = host.getClassName();
                 Class<?> myClass = Class.forName(className);
-                MonitoringServiceBase myObject = (MonitoringServiceBase) myClass.newInstance();
+                Constructor<?> constructor = myClass.getConstructor(String.class);
+
+                MonitoringServiceBase myObject = (MonitoringServiceBase) constructor.newInstance(host.getIpAddress());
                 // Вызываем метод getMemoryUtilization() с параметром host.ipAddress
-                Method method = myClass.getMethod("getMemoryUtilization", String.class);
-                Object result = method.invoke(myObject, host.getIpAddress());
+                //Method method = myClass.getMethod("getMemoryUtilization", String.class);
+                Method method = myClass.getMethod("getCPUUtilization");
+                Object result = method.invoke(myObject);
                 //System.out.println("result = "+result+", "+result.getClass());
 
                 // приводим результат к требуемому формату double
-                double memoryUtilization = 0;
+                double cpuUtilization = 0;
                 if (result instanceof Double)
-                    memoryUtilization = (Double) result;
+                    cpuUtilization = (Double) result;
 
                 myObject.destroy(); // закрываем ресурсы
 
@@ -51,12 +55,13 @@ public class PollerJobService {
                 RawData rawData = new RawData();
                 rawData.setHost(host);
                 rawData.setTimestamp(new Timestamp(System.currentTimeMillis()));
-                rawData.setMemoryUtilization(memoryUtilization);
+                rawData.setCpuUtilization(cpuUtilization);
 
                 System.out.println(rawData); // debug
                 rawDataRepository.save(rawData);
             } catch (Exception e) {
                 System.err.println("В процедуре мониторинга хостов выброшено исключение: "+e.getMessage());
+                e.printStackTrace();
             }
 
         }

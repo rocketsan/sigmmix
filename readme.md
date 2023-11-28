@@ -33,6 +33,12 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 | /login        | Страница входа              |
 | /logout       | Выход из системы            |
 
+
+## Todo
+1. Закрыть грантами разделы кроме корня для MON
+2. Добавить телеграм бота и модуль отправки сообщения
+3. Добавить метрики и триггеры
+
 ## Как сконфигурировать SNMP сервер?
 1. Установить пакет:
 
@@ -50,6 +56,11 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 4. Проверка:
 
     `snmpwalk -v 2c -c public 127.0.0.1 1.3.6.1.4.1.2021.4.6`
+
+## Как нагрузить процессор?
+`yes > /dev/null`
+
+Выход по Ctrl+C
 
 ## Useful links
 * https://logomaster.ai/ - генератор логотипов по ключевым словам

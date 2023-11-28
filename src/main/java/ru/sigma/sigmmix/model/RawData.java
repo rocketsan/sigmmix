@@ -24,8 +24,17 @@ public class RawData {
 
     // Отслеживаемые параметры //////////
     private double memoryUtilization;
+    private double cpuUtilization;
 
     /////////////////////////////////////
+
+    public double getCpuUtilization() {
+        return cpuUtilization;
+    }
+
+    public void setCpuUtilization(double cpuUtilization) {
+        this.cpuUtilization = cpuUtilization;
+    }
 
     public Long getId() {
         return id;
@@ -66,7 +75,7 @@ public class RawData {
                 ", host=" + host +
                 ", timestamp=" + timestamp +
                 ", memoryUtilization=" + memoryUtilization +
+                ", cpuUtilization=" + cpuUtilization +
                 '}';
     }
-
 }
