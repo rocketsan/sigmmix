@@ -4,10 +4,10 @@ import java.io.IOException;
 
 public abstract class MonitoringServiceBase {
 
-    /* Утилизация CPU (load average 1 min)*/
+    /* Утилизация CPU (load average 1 min) */
     abstract public double getCPUUtilization() throws Exception;
 
-    /* Утилизаия памяти (не работает) */
+    /* Утилизаия памяти */
     abstract public double getMemoryUtilization() throws Exception;
 
     /**

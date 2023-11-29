@@ -18,6 +18,11 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
 
     private final CommunityTarget<UdpAddress> target;
 
+    /**
+     * Получение конкретно значения CPU load average через snmp
+     * @return - конкретное значение
+     * @throws Exception - если что-то случилось
+     */
     @Override
     public double getCPUUtilization() throws Exception {
 
@@ -30,7 +35,7 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
         if (responsePDU != null) {
             VariableBinding cpuUtilizationVar = responsePDU.get(3);
             cpuUtilizationPercentage = Double.parseDouble(cpuUtilizationVar.getVariable().toString());
-            System.out.println("CPU="+cpuUtilizationPercentage);
+            //System.out.println("CPU="+cpuUtilizationPercentage); // debug
         } else {
             throw new Exception("Общая ошибка при получении snmp-данных");
         }
@@ -38,7 +43,38 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
     }
 
     /**
-     * Создание объектов для управления SNMP
+     * Реализация логики для опроса удаленного сервера через SNMP и получения значения утилизации памяти
+     * На текущий момент КОРРЕКТНО НЕ РАБОТАЕТ!
+     * @return Значение текущей утилизации памяти хоста в процентах
+     */
+    public double getMemoryUtilization() throws Exception {
+        // Отправка SNMP GET запроса
+        ResponseEvent response = snmp.send(pdu, target);
+        PDU responsePDU = response.getResponse();
+
+        // Обработка ответа
+        double memoryUsagePercentage;
+        if (responsePDU != null) {
+            VariableBinding usedMemoryVar = responsePDU.get(0);
+            VariableBinding freeMemoryVar = responsePDU.get(1);
+            VariableBinding totalMemoryVar = responsePDU.get(2);
+
+            long usedMemory = usedMemoryVar.getVariable().toLong();
+            long freeMemory = freeMemoryVar.getVariable().toLong();
+            long totalMemory = totalMemoryVar.getVariable().toLong();
+
+            memoryUsagePercentage = ((double) usedMemory / totalMemory) * 100; // todo: Выглядит как лажа! Перепроверить!
+            memoryUsagePercentage = Math.round(memoryUsagePercentage * 100.0) / 100.0; // берём только два знака после запятой
+            //System.out.println("Используемая память в процентах: " + memoryUsagePercentage + "%");
+            //System.out.println("RAM="+memoryUsagePercentage); // debug
+        } else {
+            throw new Exception("Общая ошибка при получении snmp-данных");
+        }
+        return memoryUsagePercentage;
+    }
+
+    /**
+     * Конструктор - создание объектов для управления SNMP
      * @param ipAddress - адрес хоста, по котормоу мы снимаеи snmp-метрики
      * @throws IOException - если что-то пошло не так
      */
@@ -51,7 +87,7 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
         // Примеры OID-ов: https://qinet.ru/2010/09/311/
         pdu = new PDU();
         // Перечисляем все OID-ы, по которым мы будем снимать данные
-        // Обращение к полям по индексу
+        // Обращение к полям по индексу!
         pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.11.0")));   // #0) используемая память (not ok)
         pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.6.0")));    // #1) свободная память (not ok)
         pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.5.0")));    // #2) всего памяти (ok)
@@ -74,36 +110,6 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
      */
     public void destroy() throws IOException {
         snmp.close();
-    }
-
-    /**
-     * Реализация логики для опроса удаленного сервера через SNMP и получения значения утилизации памяти
-     * @return Значение текущей утилизации памяти хоста в процентах
-     */
-    public double getMemoryUtilization() throws Exception {
-        // Отправка SNMP GET запроса
-        ResponseEvent response = snmp.send(pdu, target);
-        PDU responsePDU = response.getResponse();
-
-        // Обработка ответа
-        double memoryUsagePercentage;
-        if (responsePDU != null) {
-            VariableBinding usedMemoryVar = responsePDU.get(0);
-            VariableBinding freeMemoryVar = responsePDU.get(1);
-            VariableBinding totalMemoryVar = responsePDU.get(2);
-
-            long usedMemory = usedMemoryVar.getVariable().toLong();
-            long freeMemory = freeMemoryVar.getVariable().toLong();
-            long totalMemory = totalMemoryVar.getVariable().toLong();
-            System.out.println("used="+usedMemory+", free="+freeMemory+", total="+totalMemory);
-            //long totalMemory = usedMemory + freeMemory;
-
-            memoryUsagePercentage = ((double) usedMemory / totalMemory) * 100; // todo: Выглядит как лажа! Перепроверить!
-            //System.out.println("Используемая память в процентах: " + memoryUsagePercentage + "%");
-        } else {
-            throw new Exception("Общая ошибка при получении snmp-данных");
-        }
-        return memoryUsagePercentage;
     }
 
 }

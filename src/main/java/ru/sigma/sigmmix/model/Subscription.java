@@ -25,9 +25,14 @@ public class Subscription {
     private String template;
 
     private boolean isActive;
+    private boolean isRemoved;
 
     public Subscription() {
-        this.template = "Сработал триггер превышения порога значения атрибута {subscription.metricaName} > {subscription.thresholdValue}\nХост: {host.ipAddress}";
+        // Шаблон телеграм-сообщения по-умолчанию
+        this.template = """
+                Хост {ipAddress}
+                Сработал триггер превышения порога значения атрибута {metricaName} > {thresholdValue}
+                Текущее значение: {value}""";
     }
 
     public Long getId() {
@@ -78,6 +83,14 @@ public class Subscription {
         isActive = active;
     }
 
+    public boolean isRemoved() {
+        return isRemoved;
+    }
+
+    public void setRemoved(boolean removed) {
+        isRemoved = removed;
+    }
+
     public String getTemplate() {
         return template;
     }
@@ -96,6 +109,7 @@ public class Subscription {
                 ", thresholdValue=" + thresholdValue +
                 //", template='" + template + '\'' +
                 ", isActive=" + isActive +
+                ", isRemoved=" + isRemoved +
                 '}';
     }
 }

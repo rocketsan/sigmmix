@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableScheduling
 public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
-        // Стандартная форма авторизации
+        // Для авторизации будем использовать стандартную форму
         registry.addViewController("/login").setViewName("login");
     }
 }

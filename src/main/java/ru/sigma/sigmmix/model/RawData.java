@@ -72,19 +72,21 @@ public class RawData {
     }
 
     /**
-     * Возвращает список строк с названиями атрибутов данного класса
+     * Возвращает список строк с названиями атрибутов данного класса.
+     * Необходимо для получения списка метрик.
      */
     public static List<String> getMetricFields() {
         Class<?> myClass = RawData.class;
         Field[] fields = myClass.getDeclaredFields();
         List<String> fieldNames = new ArrayList<>();
         for (Field field : fields) {
+            // возвращаем только те поля, которые имеют тип double
+            // todo: либо аннтированные специальной аннотацией
             if (field.getType() == double.class) {
                 fieldNames.add(field.getName());
             }
         }
         fieldNames.sort(null);
-        //System.out.println(fieldNames);
         return fieldNames;
     }
 

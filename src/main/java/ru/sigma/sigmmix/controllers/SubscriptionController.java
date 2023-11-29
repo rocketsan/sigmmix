@@ -40,7 +40,7 @@ public class SubscriptionController {
 
     @GetMapping("/subscription")
     public String listSubscriptions(Model model) {
-        List<Subscription> subscriptions = subscriptionRepository.findAll();
+        List<Subscription> subscriptions = subscriptionRepository.findByisRemoved(false);
         subscriptions.sort(Comparator.comparing(Subscription::getId));
         model.addAttribute("subscriptions", subscriptions);
         model.addAttribute("pageTitle", "Подписки");
@@ -108,6 +108,27 @@ public class SubscriptionController {
         return "redirect:/subscription";
     }
 
+    @GetMapping("/delete-subscription/{id}")
+    public String deleteSubscription(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Subscription subscription = subscriptionRepository.findById(id).orElse(null);
+
+        if (subscription == null) {
+            // Обработка случая, если подписка не найдена
+            redirectAttributes.addFlashAttribute("errorMessage", "Подписка не найдена!");
+            return "redirect:/subscription"; // или другой URL
+        }
+        if (subscription.isActive()) {
+            // Подписка активна! Сначала выключите!
+            redirectAttributes.addFlashAttribute("errorMessage", "Нельзя удалить активную подписку!");
+            return "redirect:/subscription";
+        }
+
+        subscription.setRemoved(true); // removed flag
+        subscriptionRepository.save(subscription);
+        redirectAttributes.addFlashAttribute("successMessage", "Подписка успешно удалена");
+
+        return "redirect:/subscription";
+    }
 
 
 }

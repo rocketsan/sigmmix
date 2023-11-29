@@ -65,7 +65,7 @@
             <label for="template" class="col-sm-2 col-form-label">Шаблон уведомления</label>
             <div class="col-sm-10">
               <textarea class="form-control" rows="3" name="template" id="template" th:text="*{template}"></textarea>
-              <p><small>Допустимые в шаблоне макросы: <mark>{subscription.metricaName}</mark>, <mark>{subscription.thresholdValue}</mark>, <mark>{host.ipAddress}</mark></small></p>
+              <p><small>Допустимые в шаблоне макросы: <mark>{metricaName}</mark>, <mark>{thresholdValue}</mark>, <mark>{ipAddress}</mark>, <mark>{value}</mark></mark></small></p>
 
             </div>
           </div>

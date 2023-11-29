@@ -14,9 +14,10 @@ CREATE DATABASE springboot;
 CREATE USER spring WITH PASSWORD 'spring';
 GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;    
 ```
-2. Переименовать файл `application.example` в `application.properties` ~~и настроить коннекцию к БД~~
-3. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApp`
-4. Перейти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
+2. Настроить телеграм бота через `@BotFather`, получить token
+3. Переименовать файл `application.example` в `application.properties` и прописать токен и имя бота 
+4. Запустить метод `main()` в классе `ru.sigma.sigmmix.MainApp`
+5. Перейти по ссылке http://127.0.0.1:8080/ и удостовериться, что приложение работает нормально
 
 **Внимание:** В приложении есть встроенная учетная запись с правами администратора: `admin:admin`
 
@@ -35,9 +36,7 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 
 
 ## Todo
-1. ~~Закрыть грантами разделы кроме корня для MONITON~~
-2. Добавить метрики и триггеры
-3. Добавить телеграм бота и модуль отправки сообщения
+1. Сделать график на главной странице правдоподобным!
 
 ## Как сконфигурировать SNMP сервер?
 1. Установить пакет:
@@ -55,12 +54,27 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
     `firewall-cmd --reload`
 4. Проверка:
 
-    `snmpwalk -v 2c -c public 127.0.0.1 1.3.6.1.4.1.2021.4.6`
+    `snmpwalk -v 2c -c public 127.0.0.1 1.3.6.1.4.1.2021.10.1.3.1`
 
 ## Как нагрузить процессор?
 `yes > /dev/null`
 
 Выход по Ctrl+C
+
+## Возможные проблемы и пути их решения
+### 1. При запуске возникает исключение SunCertPathBuilderException 
+`PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested targe`
+
+**Возможная причина**: скорее всего корпоративный Касперский подсовывает свой недостоверный ssl-сертификат
+
+**Способ исправления**: Запустить повторно? (мне помогло)
+
+### 2. Возникает исключение TelegramApiRequestException
+`Error executing org.telegram.telegrambots.meta.api.methods.updates.GetUpdates query: [409] Conflict: terminated by other getUpdates request; make sure that only one bot instance is running`
+
+**Возможная причина**: Тут очевидно, бота юзает какой-то другой клиент
+
+**Способ исправления**: Отключить сервис (naumb)
 
 ## Useful links
 * https://logomaster.ai/ - генератор логотипов по ключевым словам

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.sigma.sigmmix.model.Host;
 import ru.sigma.sigmmix.repositories.HostRepository;
+import ru.sigma.sigmmix.repositories.SubscriptionRepository;
 import ru.sigma.sigmmix.services.monitoring.MonitoringServiceBase;
 
 import java.util.Comparator;
@@ -28,10 +29,12 @@ public class HostController {
 
     @Autowired
     private HostRepository hostRepository;
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
 
     @GetMapping("/hosts")
     public String listHosts(Model model) {
-        List<Host> hosts = hostRepository.findAll();
+        List<Host> hosts = hostRepository.findByisRemoved(false);
         hosts.sort(Comparator.comparing(Host::getId));
         model.addAttribute("hosts", hosts);
         model.addAttribute("pageTitle", "Хосты");
@@ -45,7 +48,6 @@ public class HostController {
 
         return reflections.getSubTypesOf(MonitoringServiceBase.class)
                 .stream()
-                //.map(Class::getSimpleName)
                 .map(Class::getName)
                 .collect(Collectors.toList());
     }
@@ -87,6 +89,13 @@ public class HostController {
             // Хост активный! Сначала выключите!
             redirectAttributes.addFlashAttribute("errorMessage", "Нельзя удалить активный хост!");
             return "redirect:/hosts";
+        }
+
+        if (!subscriptionRepository.findByHostAndIsRemovedIsFalse(host).isEmpty()) {
+            // С хостом связаны уведомления! Сначала удалите уведомления!
+            redirectAttributes.addFlashAttribute("errorMessage", "Нельзя удалить хост, с которым связаны уведомления! Сначала удалите уведомления!");
+            return "redirect:/subscription";
+
         }
 
         host.setRemoved(true); // removed flag

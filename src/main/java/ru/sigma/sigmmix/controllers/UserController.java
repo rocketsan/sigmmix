@@ -79,28 +79,6 @@ public class UserController {
         return "redirect:/users";
     }
 
-    /*
-    @PostMapping("/edit-user/{id}")
-    public String editUser(@PathVariable Long id, @ModelAttribute User editedUser) {
-        User existingUser = userRepository.findById(id).orElse(null);
-
-        if (existingUser == null) {
-            // Обработка случая, если пользователь не найден
-            return "redirect:/users"; // или другой URL
-        }
-
-        // Обновите поля существующего пользователя данными из editedUser
-        existingUser.setLogin(editedUser.getLogin());
-        existingUser.setPassword(editedUser.getPassword());
-        existingUser.setRole(editedUser.getRole());
-        existingUser.setTelegramId(editedUser.getTelegramId());
-
-        userRepository.save(existingUser);
-        return "redirect:/users";
-    }
-
-     */
-
     @GetMapping("/delete-user/{id}")
     public String deleteUser(@PathVariable Long id) {
         User user = userRepository.findById(id).orElse(null);

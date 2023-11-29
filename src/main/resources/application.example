@@ -6,3 +6,5 @@ spring.thymeleaf.cache=false
 spring.thymeleaf.prefix=file:src/main/resources/templates/
 application.name=Sigmmix
 application.poller.period=10000
+bot.token=5555555555:change_me
+bot.name=test_bot_change_me
