@@ -8,20 +8,15 @@ import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import ru.sigma.sigmmix.repositories.HostRepository;
-import ru.sigma.sigmmix.repositories.RawDataRepository;
 
 import java.io.IOException;
 
-//@Service
 public class SNMPServiceImpl extends MonitoringServiceBase {
 
-    private Snmp snmp;
-    private PDU pdu;
+    private final Snmp snmp;
+    private final PDU pdu;
 
-    private CommunityTarget target;
+    private final CommunityTarget<UdpAddress> target;
 
     @Override
     public double getCPUUtilization() throws Exception {
@@ -44,6 +39,8 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
 
     /**
      * Создание объектов для управления SNMP
+     * @param ipAddress - адрес хоста, по котормоу мы снимаеи snmp-метрики
+     * @throws IOException - если что-то пошло не так
      */
     public SNMPServiceImpl(String ipAddress) throws IOException {
         TransportMapping<? extends Address> transport = new DefaultUdpTransportMapping();
@@ -53,27 +50,26 @@ public class SNMPServiceImpl extends MonitoringServiceBase {
         // Создание объекта PDU для выполнения SNMP GET запроса
         // Примеры OID-ов: https://qinet.ru/2010/09/311/
         pdu = new PDU();
-        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.11.0"))); // 0) OID для используемой памяти
-        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.6.0")));  // 1) OID для свободной памяти
-        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.5.0")));  // 2) TOTAL mem
-        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.10.1.3.1"))); // 3) CPU
+        // Перечисляем все OID-ы, по которым мы будем снимать данные
+        // Обращение к полям по индексу
+        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.11.0")));   // #0) используемая память (not ok)
+        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.6.0")));    // #1) свободная память (not ok)
+        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.4.5.0")));    // #2) всего памяти (ok)
+        pdu.add(new VariableBinding(new OID(".1.3.6.1.4.1.2021.10.1.3.1"))); // #3) CPU load average 1 min (ok)
 
         pdu.setType(PDU.GET);
 
         // Создание объекта CommunityTarget для настройки адреса и комьюнити
-        target = new CommunityTarget();
+        target = new CommunityTarget<>();
         target.setCommunity(new OctetString("public"));
         target.setVersion(SnmpConstants.version2c);
         target.setAddress(new UdpAddress(ipAddress + "/161"));
         target.setRetries(2);
         target.setTimeout(1500);
-
     }
 
-
-
     /**
-     * Код, который должен выполниться при завершении приложения - закрытие сессии smnp (а надо ли?)
+     * Код, который должен выполниться при завершении приложения - закрытие сессии smnp
      * @throws IOException если что-то пошло не так
      */
     public void destroy() throws IOException {

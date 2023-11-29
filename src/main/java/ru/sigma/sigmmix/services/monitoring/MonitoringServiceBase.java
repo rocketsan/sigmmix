@@ -4,13 +4,16 @@ import java.io.IOException;
 
 public abstract class MonitoringServiceBase {
 
-    /* Утилизаия памяти (не работает?) */
-    abstract public double getMemoryUtilization() throws Exception;
-
-    /* Утилизация CPU */
+    /* Утилизация CPU (load average 1 min)*/
     abstract public double getCPUUtilization() throws Exception;
 
-    /* обязательно закрывать коннекцию после завершения поллинга! */
+    /* Утилизаия памяти (не работает) */
+    abstract public double getMemoryUtilization() throws Exception;
+
+    /**
+     * обязательно закрывать коннекцию после завершения поллинга!
+     * открывается коннекция в конструкторе
+     */
     abstract void destroy() throws IOException;
 
 }

@@ -10,4 +10,6 @@ public interface SubscriptionRepository extends CrudRepository<Subscription, Lon
 
     @NotNull List<Subscription> findAll();
 
+    List<Subscription> findByisActive(boolean b);
+
 }

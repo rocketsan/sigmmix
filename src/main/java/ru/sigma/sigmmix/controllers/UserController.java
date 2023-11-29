@@ -67,7 +67,14 @@ public class UserController {
     }
 
     @PostMapping("/save-user")
-    public String addUser(@ModelAttribute User user) {
+    public String saveUser(@ModelAttribute User user) {
+        if (user.getId() != null) { // если мы пришли с формы редактирования существующего юзера
+            User existingUser = userRepository.findById(user.getId()).orElse(null);
+            if (existingUser!=null && user.getPassword().equals("******")) {
+                // если юзер не переопределил пароль-заглушку, то не сохраняем его
+                user.setPassword(existingUser.getPassword());
+            }
+        }
         userRepository.save(user);
         return "redirect:/users";
     }

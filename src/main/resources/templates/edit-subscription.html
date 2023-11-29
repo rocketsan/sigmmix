@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+
+<header th:replace="~{fragments :: header}"></header>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Leftbar -->
+    <div th:replace="~{fragments :: leftbar}"></div>
+
+    <!-- MainBar -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      <div class="justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2 mb-4" th:if="${subscription.id}">Редактирование подписки</h1>
+        <h1 class="h2 mb-4" th:unless="${subscription.id}">Добавить новую подписку</h1>
+        <p class="lead">
+          Настройка параметров отслеживания метрики хоста. При достижения порогового значения пользователю
+          будет отправлено уведомление в telegram от имени бота @....
+        </p>
+
+        <form th:action="@{/save-subscription}" method="post" th:object="${subscription}">
+          <input type="hidden" id="id" name="id" th:field="*{id}">
+
+          <div class="row mb-3">
+            <label for="host" class="col-sm-2 col-form-label">Хост</label>
+            <div class="col-sm-10">
+              <select class="form-select" id="host" name="host" th:field="*{host}">
+                <option th:each="host : ${hosts}"
+                        th:value="${host.id}"
+                        th:text="${host.ipAddress}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="user" class="col-sm-2 col-form-label">Пользователь</label>
+            <div class="col-sm-10">
+              <select class="form-select" id="user" name="user" th:field="*{user}">
+                <option th:each="user : ${users}"
+                        th:value="${user.id}"
+                        th:text="${user.login} + ' ( telegram_id=' + ${user.telegramId} + ' )'"
+                        th:disabled="${user.telegramId == null ? true : false}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="metrica" class="col-sm-2 col-form-label">Отслеживаемая метрика</label>
+            <div class="col-sm-10">
+              <select class="form-select" id="metrica" name="metrica" th:field="*{metricaName}">
+                <option th:each="metrica : ${metrics}"
+                        th:text="${metrica}"
+                        th:value="${metrica}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="thresholdValue" class="col-sm-2 col-form-label">Пороговое значение (float)</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="thresholdValue" id="thresholdValue" th:field="*{thresholdValue}" required/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label for="template" class="col-sm-2 col-form-label">Шаблон уведомления</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" rows="3" name="template" id="template" th:text="*{template}"></textarea>
+              <p><small>Допустимые в шаблоне макросы: <mark>{subscription.metricaName}</mark>, <mark>{subscription.thresholdValue}</mark>, <mark>{host.ipAddress}</mark></small></p>
+
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-sm-5 offset-sm-2 text-start">
+              <button class="btn btn-primary" type="submit" th:text="${subscription.id} ? 'Сохранить' : 'Добавить подписку'">Добавить</button>
+            </div>
+            <div class="col-sm-5 text-end">
+              <a href="javascript:void(0);" onclick="history.back();" class="btn btn-secondary">Назад</a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

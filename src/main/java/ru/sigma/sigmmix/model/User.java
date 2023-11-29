@@ -87,6 +87,7 @@ public class User {
                 "id=" + id +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                //", password='***'" +
                 ", role=" + role +
                 ", telegramId='" + telegramId + '\'' +
                 '}';

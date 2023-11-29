@@ -18,11 +18,25 @@
                     <p class="lead">
                         Настройка рассылки уведомлений по событиям мониторинга
                     </p>
+
+                    <div th:if="${errorMessage}" class="alert alert-danger">
+                        <!-- Отображение сообщения об ошибке (если есть) -->
+                        <strong>Ошибка:</strong> <span th:text="${errorMessage}"></span>
+                    </div>
+
+                    <div th:if="${successMessage}" class="alert alert-success">
+                        <!-- Отображение сообщения об успешной операции (если есть) -->
+                        <strong>Успешно:</strong> <span th:text="${successMessage}"></span>
+                    </div>
+
                     <table class="table table-bordered">
                         <tr class="table-secondary">
                             <th>ID</th>
                             <th>Хост</th>
                             <th>Пользователь</th>
+                            <th>Отслеживаемая метрика</th>
+                            <th>Пороговое значение</th>
+                            <th>Вкл.</th>
                             <th></th>
                         </tr>
                         <th:block th:if="${#lists.isEmpty(subscriptions)}">
@@ -32,8 +46,12 @@
                         </th:block>
                         <tr th:each="subscription : ${subscriptions}">
                             <td th:text="${subscription.id}"></td>
-                            <td th:text="${subscription.host}"></td>
-                            <td th:text="${subscription.user}"></td>
+                            <td th:text="${subscription.host.ipAddress}"></td>
+                            <td th:text="${subscription.user.login} + ' ( telegram_id=' +${subscription.user.telegramId} + ' )'"></td>
+                            <td th:text="${subscription.metricaName}"></td>
+                            <td th:text="${subscription.thresholdValue}"></td>
+                            <td th:if="${subscription.active}" class="text-center"><a th:href="@{'/edit-subscription/'+${subscription.id}+'/disable'}"><i class="bi bi-toggle-on" style="color:green;font-size:2rem;"></i></a></td>
+                            <td th:if="${!subscription.active}" class="text-center"><a th:href="@{'/edit-subscription/'+${subscription.id}+'/enable'}"><i class="bi bi-toggle-off" style="color:red;font-size: 2rem;"></i></a></td>
                             <td>
                                 <a th:href="@{/edit-subscription/{id}(id=${subscription.id})}"><i class="bi bi-pencil-square"></i></a>
                                 <a th:href="@{/delete-subscription/{id}(id=${subscription.id})}" onclick="return confirm('Вы уверены?')"><i class="bi bi-trash" style="color:#ff000085"></i></a>
@@ -45,6 +63,16 @@
             </main>
         </div>
     </div>
+
+  <script th:inline="javascript">
+
+    $(document).ready(function() {
+        setTimeout(function() {
+            $(".alert").fadeOut("slow"); // плавное затухание всех алертов
+        }, 3000);
+    });
+
+</script>
 
 </body>
 </html>

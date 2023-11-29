@@ -29,7 +29,8 @@
                         <div class="row mb-3">
                             <label for="password" class="col-sm-2 col-form-label">Пароль</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" id="password" th:field="*{password}" required/>
+                                <input th:unless="${user.id}" type="password" class="form-control" name="password" id="password" th:field="*{password}" required/>
+                                <input th:if="${user.id}" type="password" class="form-control" name="password" id="password" value="******"/>
                             </div>
                         </div>
                         <div class="row mb-3">

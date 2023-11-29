@@ -3,7 +3,10 @@ package ru.sigma.sigmmix.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.lang.reflect.Field;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_rawdata")
@@ -68,11 +71,28 @@ public class RawData {
         this.memoryUtilization = memoryUtilization;
     }
 
+    /**
+     * Возвращает список строк с названиями атрибутов данного класса
+     */
+    public static List<String> getMetricFields() {
+        Class<?> myClass = RawData.class;
+        Field[] fields = myClass.getDeclaredFields();
+        List<String> fieldNames = new ArrayList<>();
+        for (Field field : fields) {
+            if (field.getType() == double.class) {
+                fieldNames.add(field.getName());
+            }
+        }
+        fieldNames.sort(null);
+        //System.out.println(fieldNames);
+        return fieldNames;
+    }
+
     @Override
     public String toString() {
         return "RawData{" +
                 "id=" + id +
-                ", host=" + host +
+                ", host=" + host.getIpAddress() +
                 ", timestamp=" + timestamp +
                 ", memoryUtilization=" + memoryUtilization +
                 ", cpuUtilization=" + cpuUtilization +
