@@ -25,15 +25,14 @@ GRANT ALL PRIVILEGES ON DATABASE springboot TO spring;
 
 ## Список endpoint'ов
 
-| Endpoint      | Description                 |
-|---------------|-----------------------------|
-| /             | Главная страница дашборда   |
-| /users        | Список пользовтелей         |
-| /hosts        | Список хостов               |
-| /subscription | Список рассылок уведомлений |
-| /login        | Страница входа              |
-| /logout       | Выход из системы            |
-
+| Endpoint      | Description                 | Roles          |
+|---------------|-----------------------------|----------------|
+| /             | Главная страница дашборда   | ADMIN, MONITOR |
+| /users        | Список пользовтелей         | ADMIN          |
+| /hosts        | Список хостов               | ADMIN          |
+| /subscription | Список рассылок уведомлений | ADMIN          |
+| /login        | Страница входа              | ALL            |
+| /logout       | Выход из системы            | ADMIN, MONITOR |
 
 ## Todo
 1. Сделать график на главной странице правдоподобным!
