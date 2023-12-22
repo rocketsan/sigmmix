@@ -53,7 +53,7 @@ public class SubscriptionController {
         model.addAttribute("pageTitle", "Подписки");
         List<User> userList = userRepository.findAll();
         model.addAttribute("users", userList);
-        List<Host> hostList = hostRepository.findAll();
+        List<Host> hostList = hostRepository.findByisRemoved(false);
         model.addAttribute("hosts", hostList);
         List<String> metricsList = RawData.getMetricFields();
         model.addAttribute("metrics", metricsList);
